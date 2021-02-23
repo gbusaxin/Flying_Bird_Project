@@ -21,6 +21,11 @@ public class GameActivity extends AppCompatActivity {
     private Runnable runnable;
     private Handler handler;
 
+    int birdX, birdY;
+    int enemy1X, enemy2X, enemy3X, coin1X, coin2X;
+    int enemy1Y, enemy2Y, enemy3Y, coin1Y, coin2Y;
+    int screenWidth, screenHeight;
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +53,21 @@ public class GameActivity extends AppCompatActivity {
 
                 if (!beginControl) {
                     beginControl = true;
+
+                    screenWidth = (int) constraintLayout.getWidth();
+                    screenHeight = (int) constraintLayout.getHeight();
+
+                    birdX = (int) bird.getX();
+                    birdY = (int) bird.getY();
+
                     handler = new Handler();
                     runnable = new Runnable() {
                         @Override
                         public void run() {
+
+                            moveToBird();
+                            enemyControl();
+
                             handler.postDelayed(runnable, 20);
                         }
                     };
@@ -68,5 +84,45 @@ public class GameActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    private void enemyControl() {
+        enemy1.setVisibility(View.VISIBLE);
+        enemy2.setVisibility(View.VISIBLE);
+        enemy3.setVisibility(View.VISIBLE);
+        coin1.setVisibility(View.VISIBLE);
+        coin2.setVisibility(View.VISIBLE);
+
+        enemy1X = enemy1X - (screenWidth / 150);
+
+        if (enemy1X < 0){
+            enemy1X = screenWidth + 200;
+            enemy1X = (int) Math.floor(Math.random() * screenHeight);
+
+            if (enemy1Y <= 0){
+                enemy1Y = 0;
+            }
+
+            if (enemy1Y >= (screenHeight - enemy1.getHeight())){
+                enemy1Y = (screenHeight - enemy1.getHeight());
+            }
+        }
+    }
+
+    private void moveToBird() {
+        if (touchControl){
+            birdY = birdY - (screenHeight / 50);
+        } else{
+            birdY = birdY + (screenHeight / 50);
+        }
+
+        if (birdY <= 0){
+            birdY = 0;
+        }
+
+        if (birdY >= (screenHeight - bird.getHeight())){
+            birdY = (screenHeight - bird.getHeight());
+        }
+        bird.setY(birdY);
     }
 }
