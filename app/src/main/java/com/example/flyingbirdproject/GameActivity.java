@@ -51,43 +51,37 @@ public class GameActivity extends AppCompatActivity {
         textViewStartInfo = findViewById(R.id.textViewStartInfo);
         constraintLayout = findViewById(R.id.constraintLayout);
 
-        constraintLayout.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
+        constraintLayout.setOnTouchListener((View.OnTouchListener) (v, event) -> {
 
-                textViewStartInfo.setVisibility(View.INVISIBLE);
+            textViewStartInfo.setVisibility(View.INVISIBLE);
 
-                if (!beginControl) {
-                    beginControl = true;
+            if (!beginControl) {
+                beginControl = true;
 
-                    screenWidth = (int) constraintLayout.getWidth();
-                    screenHeight = (int) constraintLayout.getHeight();
+                screenWidth = (int) constraintLayout.getWidth();
+                screenHeight = (int) constraintLayout.getHeight();
 
-                    birdX = (int) bird.getX();
-                    birdY = (int) bird.getY();
+                birdX = (int) bird.getX();
+                birdY = (int) bird.getY();
 
-                    handler = new Handler();
-                    runnable = new Runnable() {
-                        @Override
-                        public void run() {
+                handler = new Handler();
+                runnable = () -> {
 
-                            moveToBird();
-                            collisionControl();
-                            enemyControl();
-                        }
-                    };
-                    handler.post(runnable);
-                } else {
-                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                        touchControl = true;
-                    }
-
-                    if (event.getAction() == MotionEvent.ACTION_UP) {
-                        touchControl = false;
-                    }
+                    moveToBird();
+                    collisionControl();
+                    enemyControl();
+                };
+                handler.post(runnable);
+            } else {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    touchControl = true;
                 }
-                return true;
+
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    touchControl = false;
+                }
             }
+            return true;
         });
     }
 
@@ -175,23 +169,20 @@ public class GameActivity extends AppCompatActivity {
             coin2.setVisibility(View.INVISIBLE);
 
             handler2 = new Handler();
-            runnable2 = new Runnable() {
-                @Override
-                public void run() {
+            runnable2 = () -> {
 
-                    birdX = birdX + (screenWidth / 300);
-                    bird.setX(birdX);
-                    bird.setY(screenHeight / 2f);
-                    if (birdX <= screenWidth){
-                        handler2.postDelayed(runnable2, 20);
-                    }else{
-                        handler2.removeCallbacks(runnable2);
+                birdX = birdX + (screenWidth / 300);
+                bird.setX(birdX);
+                bird.setY(screenHeight / 2f);
+                if (birdX <= screenWidth){
+                    handler2.postDelayed(runnable2, 20);
+                }else{
+                    handler2.removeCallbacks(runnable2);
 
-                        Intent intent = new Intent(GameActivity.this, ResultActivity.class);
-                        intent.putExtra("score", score);
-                        startActivity(intent);
-                        finish();
-                    }
+                    Intent intent = new Intent(GameActivity.this, ResultActivity.class);
+                    intent.putExtra("score", score);
+                    startActivity(intent);
+                    finish();
                 }
             };
             handler2.post(runnable2);

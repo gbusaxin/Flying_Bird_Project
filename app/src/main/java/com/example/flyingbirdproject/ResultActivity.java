@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import javax.xml.transform.Result;
 
 public class ResultActivity extends AppCompatActivity {
 
@@ -64,21 +63,14 @@ public class ResultActivity extends AppCompatActivity {
         builder.setTitle("Джун тебе не простит!");
         builder.setMessage("Ты точно хочешь выйти?");
         builder.setCancelable(false);
-        builder.setNegativeButton("Выйти", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        builder.setNegativeButton("Выйти", (dialog, which) -> {
+            moveTaskToBack(true);
+            android.os.Process.killProcess(android.os.Process.myPid());
+            System.exit(0);
 
-                moveTaskToBack(true);
-                android.os.Process.killProcess(android.os.Process.myPid());
-                System.exit(0);
-
-            }
         });
-        builder.setPositiveButton("Остаться", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        builder.setPositiveButton("Остаться", (dialog, which) -> {
                 dialog.cancel();
-            }
         });
         builder.show();
     }
