@@ -3,6 +3,7 @@ package com.example.flyingbirdproject;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
@@ -15,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView bird, enemy1, enemy2, enemy3, coin;
     private Button buttonStart;
     private Animation animation;
+    private MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +38,18 @@ public class MainActivity extends AppCompatActivity {
         coin.setAnimation(animation);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        mediaPlayer = MediaPlayer.create(MainActivity.this,R.raw.background_music);
+        mediaPlayer.start();
+    }
+
     public void onGameActivityStart(View view){
         startActivity(new Intent(this, GameActivity.class));
         finish();
     }
+
+
 }
